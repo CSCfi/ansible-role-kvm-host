@@ -1,0 +1,4 @@
+
+- name: Verify that Virtualization Technology (VT) is enabled
+  shell: grep -c -E 'svm|vmx' /proc/cpuinfo
+  changed_when: False
