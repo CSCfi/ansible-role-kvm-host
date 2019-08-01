@@ -25,7 +25,7 @@ Example Playbook
 - hosts: all
   roles:
     - role: ansible-role-kvm-host
-      owox_kvm_host_install_virt_manager: yes
+      owox_kvm_host_install_virt_manager: True
 ```
 
 License

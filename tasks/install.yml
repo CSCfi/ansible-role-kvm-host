@@ -1,15 +1,15 @@
 - name: Install required packages
   become: yes
   yum:
-    name: "{{ item}}"
-  with_items:
-    - qemu-kvm
-    - qemu-img
-    - libvirt
-    - libvirt-python
-    - libguestfs-tools
-    - virt-install
-    - virt-top
+    state: present
+    name:
+      - qemu-kvm
+      - qemu-img
+      - libvirt
+      - libvirt-python
+      - libguestfs-tools
+      - virt-install
+      - virt-top
 
 - name: Start libvirtd service
   become: yes
@@ -20,10 +20,10 @@
 
 - name: Install virt-manager
   become: yes
-  when: owox_kvm_host_install_virt_manager
+  when: owox_kvm_host_install_virt_manager|bool == True
   yum:
-    name: "{{ item}}"
-  with_items:
-    - virt-manager
-    - xorg-x11-xauth
-    - dejavu-lgc-sans-fonts
+    state: present
+    name:
+      - virt-manager
+      - xorg-x11-xauth
+      - dejavu-lgc-sans-fonts
