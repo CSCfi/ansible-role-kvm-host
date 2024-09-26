@@ -11,3 +11,5 @@
   tags:
   - kvm-host
   - kvm-host:install
+
+- include_tasks: virt_pools.yml

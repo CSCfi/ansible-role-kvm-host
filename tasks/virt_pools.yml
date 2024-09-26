@@ -1,0 +1,54 @@
+# Gather facts about storage pools
+# Facts will be available as 'ansible_libvirt_pools'
+- name: Check current pools
+  virt_pool:
+    command: facts
+
+- name: Check if we already have pools
+  debug:
+    var: ansible_libvirt_pools.{{ item }}.state
+  loop: "{{ libvirt_storage_pools }}"
+
+
+- name: Define a new storage pool
+  become: true
+  virt_pool:
+    command: define
+    name: "{{ item }}"
+    xml: '{{ lookup("template", "libvirt_pool.xml") }}'
+  loop: "{{ libvirt_storage_pools }}"
+
+- name: Build a storage pool if it does not exist
+  become: true
+  virt_pool:
+    command: build
+    name: "{{ item }}"
+  loop: "{{ libvirt_storage_pools }}"
+  when: 'ansible_libvirt_pools[item]["state"] | default("new") != "active"'
+
+- name: Show states
+  debug:
+    msg: "{{ item }} state is {{ ansible_libvirt_pools[item]['state']}}"
+    # var: ansible_libvirt_pools.item.state
+  loop: "{{ libvirt_storage_pools }}"
+
+- name: Start a storage pool
+  virt_pool:
+    state: active
+    name: "{{ item }}"
+  loop: "{{ libvirt_storage_pools }}"
+  when: 'ansible_libvirt_pools[item]["state"] | default("new") != "active"'
+
+- name: Ensure that pools will be started at boot
+  virt_pool:
+    autostart: true
+    name: "{{ item }}"
+  loop: "{{ libvirt_storage_pools }}"
+
+# - name: Ensure that a given pool will be started at boot
+#   virt_pool:
+#     autostart: yes
+#     name: "{{ item }}"
+#   loop: "{{ libvirt_storage_pools }}"
+
+
