@@ -2,12 +2,12 @@
 # tasks file for ansible-role-kvm-host
 
 # To be able to test role with virtualbox we have to skip that tasks
-- include: verify_vt_enabled.yml
+- include_tasks: verify_vt_enabled.yml
   when: ansible_virtualization_role != 'guest' and ansible_virtualization_type != 'virtualbox'
   tags:
   - kvm-host
 
-- include: install.yml
+- include_tasks: install.yml
   tags:
   - kvm-host
   - kvm-host:install
