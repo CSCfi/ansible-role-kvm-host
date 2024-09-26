@@ -4,12 +4,6 @@
   virt_pool:
     command: facts
 
-- name: Check if we already have pools
-  debug:
-    var: ansible_libvirt_pools.{{ item }}.state
-  loop: "{{ libvirt_storage_pools }}"
-
-
 - name: Define a new storage pool
   become: true
   virt_pool:
@@ -26,12 +20,6 @@
   loop: "{{ libvirt_storage_pools }}"
   when: 'ansible_libvirt_pools[item]["state"] | default("new") != "active"'
 
-- name: Show states
-  debug:
-    msg: "{{ item }} state is {{ ansible_libvirt_pools[item]['state']}}"
-    # var: ansible_libvirt_pools.item.state
-  loop: "{{ libvirt_storage_pools }}"
-
 - name: Start a storage pool
   virt_pool:
     state: active
@@ -44,11 +32,4 @@
     autostart: true
     name: "{{ item }}"
   loop: "{{ libvirt_storage_pools }}"
-
-# - name: Ensure that a given pool will be started at boot
-#   virt_pool:
-#     autostart: yes
-#     name: "{{ item }}"
-#   loop: "{{ libvirt_storage_pools }}"
-
 
