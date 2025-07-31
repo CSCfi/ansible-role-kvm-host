@@ -16,7 +16,7 @@
     name: "{{ item }}"
     xml: '{{ lookup("template", "libvirt_pool.xml") }}'
   loop: "{{ libvirt_storage_pools }}"
-  when: ansible_libvirt_pools |length == 0 or 'ansible_libvirt_pools.{{ item }}.state != "active"'
+  when: ansible_libvirt_pools | length == 0 or ansible_libvirt_pools[item].state != "active"
 
 - name: Let's update list of storagepools
   virt_pool:
@@ -28,7 +28,7 @@
     command: build
     name: "{{ item }}"
   loop: "{{ libvirt_storage_pools }}"
-  when: 'ansible_libvirt_pools.{{ item }}.state | default("new") != "active"'
+  when: (ansible_libvirt_pools[item].state | default("new")) != "active"
 
 - name: Start a storage pool
   virt_pool:
@@ -36,11 +36,11 @@
     state: active
     name: "{{ item }}"
   loop: "{{ libvirt_storage_pools }}"
-  when: 'ansible_libvirt_pools.{{ item }}.state | default("new") != "active"'
+  when: (ansible_libvirt_pools[item].state | default("new")) != "active"
 
 - name: Ensure that a given pool will be started at boot
   virt_pool:
     autostart: yes
     name: "{{ item }}"
   loop: "{{ libvirt_storage_pools }}"
-  when: 'ansible_libvirt_pools.{{ item }}.autostart == "no"'
+  when: (ansible_libvirt_pools[item].autostart) == "no"
