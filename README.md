@@ -26,6 +26,11 @@ Example Playbook
   roles:
     - role: ansible-role-kvm-host
       owox_kvm_host_install_virt_manager: True
+      libvirt_storage_pools:
+        - prod
+        - test
+        - devel
+
 ```
 
 License
