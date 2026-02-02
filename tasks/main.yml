@@ -11,3 +11,8 @@
   tags:
   - kvm-host
   - kvm-host:install
+
+- include_tasks: virt_pools.yml
+  when: libvirt_storage_pools is defined and libvirt_storage_pools | length > 0
+
+
